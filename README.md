@@ -1,8 +1,6 @@
-
-<H3>ENTER YOUR NAME</H3>
-<H3>ENTER YOUR REGISTER NO.</H3>
+<H3>NAME : SUPRIYA PRABHU </H3>
+<H3>REGISTER NO. 212224240165 </H3>
 <H3>EX. NO.4</H3>
-<H3>DATE:</H3>
 <H1 ALIGN =CENTER>Implementation of MLP with Backpropagation for Multiclassification</H1>
 <H3>Aim:</H3>
 To implement a Multilayer Perceptron for Multi classification
@@ -24,7 +22,6 @@ MLP has the following features:
 
   	(i)Feed Forward pass
 	         (ii)Backward pass
-           
 Ø  Learning process –backpropagation
 
 Ø  Computationally efficient method
@@ -46,7 +43,6 @@ MLP has the following features:
  Functional Signal
 
 *input signal
-
 *propagates forward neuron by neuron thro network and emerges at an output signal
 
 *F(x,w) at each neuron as it passes
@@ -62,7 +58,6 @@ Error Signal
 Each hidden neuron or output neuron of MLP is designed to perform two computations:
 
 The computation of the function signal appearing at the output of a neuron which is expressed as a continuous non-linear function of the input signal and synaptic weights associated with that neuron
-
 The computation of an estimate of the gradient vector is needed for the backward pass through the network
 
 TWO PASSES OF COMPUTATION:
@@ -86,7 +81,6 @@ If jth neuron is output neuron, the m=mL  and output of j th neuron is
 Forward phase begins with in the first hidden layer and end by computing ej(n) in the output layer
 ![image](https://user-images.githubusercontent.com/112920679/198814353-276eadb5-116e-4941-b04e-e96befae02ed.png)
 
-
 In the backward pass,
 
 •       It starts from the output layer by passing error signal towards leftward layer neurons to compute local gradient recursively in each neuron
@@ -106,7 +100,7 @@ In the backward pass,
 4. Call the train_test_split() function that further divides the dataset into training data and testing data with a testing data size of 20%.
 Normalize our dataset. 
 
-5. In order to do that we call the StandardScaler() function. Basically, the StandardScaler() function subtracts the mean from a feature and scales it to the unit variance.
+5. In order to do that we cll the StandardScaler() function. Basically, the StandardScaler() function subtracts the mean from a feature and scales it to the unit variance.
 
 6. Invoke the MLPClassifier() function with appropriate parameters indicating the hidden layer sizes, activation function, and the maximum number of iterations.
 
@@ -114,13 +108,92 @@ Normalize our dataset.
 
 8. Finally, call the functions confusion_matrix(), and the classification_report() in order to evaluate the performance of our classifier.
 
-<H3>Program:</H3> 
+### Program:
+```
+import pandas as pd
+import sklearn
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import classification_report, confusion_matrix
 
-Insert your code here
+# Load Dry Bean Dataset
+data = pd.read_excel("Dry_Bean_Dataset.xlsx")
 
-<H3>Output:</H3>
+# Display first 5 rows
+print(data.head())
 
-Show your results here
+# Display column names
+print(data.columns)
+
+# Takes first 16 columns as input features X
+X = data.iloc[:, 0:16]
+
+# Takes the last column as target variable Y
+y = data.iloc[:, 16]
+
+# Display X and y
+print(X.head())
+print(y.head())
+
+# Check the unique classes
+print("Classes:")
+print(y.unique())
+
+# Convert categorical classes into numerical values
+le = preprocessing.LabelEncoder()
+y = le.fit_transform(y)
+print("Encoded classes:")
+print(y[:10])
+
+# Split dataset into training and testing data
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42
+)
+
+# Feature scaling
+scaler = StandardScaler()
+
+scaler.fit(X_train)
+
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Create Multi-Layer Perceptron
+mlp = MLPClassifier(
+    hidden_layer_sizes=(10, 10, 10),
+    max_iter=1000,
+    random_state=42
+)
+
+# Train the MLP model
+mlp.fit(X_train, y_train)
+
+# Make predictions
+predictions = mlp.predict(X_test)
+
+print("Predictions:")
+print(predictions)
+
+# Evaluation of the model
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, predictions))
+
+print("\nClassification Report:")
+print(classification_report(y_test, predictions))
+```
+### Output:
+
+<img width="908" height="451" alt="image" src="https://github.com/user-attachments/assets/bb6bcd80-e802-4cfd-be8d-c86985e7073c" />
+<img width="933" height="786" alt="image" src="https://github.com/user-attachments/assets/5e58aa4d-5180-40e4-b791-9963bc199b90" />
+<img width="696" height="509" alt="image" src="https://github.com/user-attachments/assets/2928d579-fd0c-4527-9770-aefe7ee77858" />
+
 
 <H3>Result:</H3>
 Thus, MLP is implemented for multi-classification using python.
+
+
