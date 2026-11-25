@@ -112,14 +112,17 @@ Normalize our dataset.
 ```
 import pandas as pd
 import sklearn
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 
-# Load Dry Bean Dataset
-data = pd.read_excel("Dry_Bean_Dataset.xlsx")
+# Load Pistachio Dataset
+data = pd.read_csv("Pistachio_Dataset.csv")
 
 # Display first 5 rows
 print(data.head())
@@ -127,23 +130,24 @@ print(data.head())
 # Display column names
 print(data.columns)
 
-# Takes first 16 columns as input features X
-X = data.iloc[:, 0:16]
+# Input features X
+X = data.drop(columns=["id", "Class"])
 
-# Takes the last column as target variable Y
-y = data.iloc[:, 16]
+# Target variable Y
+y = data["Class"]
 
 # Display X and y
 print(X.head())
 print(y.head())
 
-# Check the unique classes
+# Check unique classes
 print("Classes:")
 print(y.unique())
 
 # Convert categorical classes into numerical values
 le = preprocessing.LabelEncoder()
 y = le.fit_transform(y)
+
 print("Encoded classes:")
 print(y[:10])
 
@@ -181,16 +185,42 @@ print(predictions)
 
 # Evaluation of the model
 print("\nConfusion Matrix:")
-print(confusion_matrix(y_test, predictions))
+cm = confusion_matrix(y_test, predictions)
+print(cm)
 
 print("\nClassification Report:")
-print(classification_report(y_test, predictions))
+print(classification_report(
+    y_test,
+    predictions,
+    target_names=le.classes_
+))
+
+# Plot Confusion Matrix Graph
+plt.figure(figsize=(7, 5))
+
+sns.heatmap(
+    cm,
+    annot=True,
+    fmt='d',
+    cmap='Blues',
+    xticklabels=le.classes_,
+    yticklabels=le.classes_
+)
+
+plt.title("Confusion Matrix - Pistachio Classification")
+plt.xlabel("Predicted Class")
+plt.ylabel("Actual Class")
+plt.show()
 ```
 ### Output:
 
-<img width="908" height="451" alt="image" src="https://github.com/user-attachments/assets/bb6bcd80-e802-4cfd-be8d-c86985e7073c" />
-<img width="933" height="786" alt="image" src="https://github.com/user-attachments/assets/5e58aa4d-5180-40e4-b791-9963bc199b90" />
-<img width="696" height="509" alt="image" src="https://github.com/user-attachments/assets/2928d579-fd0c-4527-9770-aefe7ee77858" />
+<img width="762" height="466" alt="image" src="https://github.com/user-attachments/assets/af582b0d-4417-40e9-8c2a-eee3d7a9c958" />
+
+<img width="687" height="687" alt="image" src="https://github.com/user-attachments/assets/0eee0181-be54-412c-bcf7-be6b8809f95c" />
+
+<img width="701" height="557" alt="image" src="https://github.com/user-attachments/assets/ab8fba9e-9e84-4321-811b-6ff90cbb1147" />
+
+<img width="677" height="471" alt="image" src="https://github.com/user-attachments/assets/a2d15507-8b41-453c-8313-c17ee84a6ccc" />
 
 
 <H3>Result:</H3>
